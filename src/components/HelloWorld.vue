@@ -74,8 +74,7 @@ import axios from "axios";
 defineProps<{ msg: string }>()
 
 const count = ref(0)
-const items = ref([])
-const isLoading = ref(false)
+const items = ref<String[]>([])
 
 const formData = ref({
   username: "",

@@ -86,7 +86,7 @@ const onSubmit = async (formData: any) => {
   console.log("Form Submitted" + "!:", formData);
 };
 
-async function op() {
+async function getUser() {
   try {
     const res = await axios.get(`http://localhost:3000/user`);
     items.value = res.data;
@@ -107,7 +107,7 @@ const onError = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
 
-op()
+getUser()
 </script>
 
 <style scoped>

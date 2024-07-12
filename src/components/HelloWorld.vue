@@ -27,18 +27,18 @@
 
   <a-form
       :model="formData"
-      name="basic"
-      autocomplete="off"
+      name="basic" autocomplete="off"
       @finish="onSubmit"
       @finishFailed="onError"
   >
     <a-form-item
         label="Username"
         name="username"
-        :rules="[{ required: true, message: 'Please input your username!' }]"
+        :rules="[{ required: true,
+        message: 'Please input your username!' }]"
     >
-      <a-input v-model:value=
-                   "formData.username" />
+      <a-input v-model:value
+                   ="formData.username" />
     </a-form-item>
 
     <a-form-item
@@ -65,17 +65,27 @@
       {{ item.username }}
     </li>
   </ul>
+
+  <div>
+    {{ pets }}
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from "axios";
+import petSearchService from "../service/PetSearchService.ts";
+
+type Item = {
+  id: number
+  username: string
+}
 
 defineProps<{ msg: string }>()
 
 const count = ref(0)
-const items = ref([])
-const isLoading = ref(false)
+const items = ref<Item[]>([])
+const pets = ref()
 
 const formData = ref({
   username: "",
@@ -87,12 +97,13 @@ const onSubmit = async (formData: any) => {
   console.log("Form Submitted" + "!:", formData);
 };
 
-async function op() {
+async function getUser() {
   try {
     const res = await axios.get(`http://localhost:3000/user`);
     items.value = res.data;
   } catch (error) {
-    console.log(error);
+
+    console.log(error)
   }
 }
 
@@ -101,18 +112,23 @@ async function addItem() {
     username: formData.value.username,
     password: formData.value.password,
   });
-  items.value = [...items.value, res.data];
+  items.value = [...items.value, res.data]
+}
+
+async function getPets() {
+  pets.value = await petSearchService.searchPets();
 }
 
 const onError = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
 };
 
-op()
+// getUser()
+getPets()
+
 </script>
 
 <style scoped>
-
 .read-the-docs {
   color: #888;
 }
